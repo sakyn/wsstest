@@ -18,4 +18,4 @@ RUN npm install -g pm2
 COPY . .
 
 EXPOSE 9443
-CMD [ "pm2", "start", "app.js" "-i", "max" ]
+CMD pm2 start app.js -i max
