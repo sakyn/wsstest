@@ -1,4 +1,4 @@
-FROM node:carbon
+FROM keymetrics/pm2:latest-alpine
 
 # Create app directory
 WORKDIR /usr/src/app
@@ -18,4 +18,4 @@ RUN npm install -g pm2
 COPY . .
 
 EXPOSE 9443
-CMD pm2 start app.js -i max
+CMD pm2-runtime start app.js -i max
