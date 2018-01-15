@@ -14,8 +14,6 @@ RUN npm install -g pm2
 # If you are building your code for production
 # RUN npm install --only=production
 
-COPY /etc/certs .
-
 # Bundle app source
 COPY . .
 
