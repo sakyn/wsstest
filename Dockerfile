@@ -10,7 +10,7 @@ COPY package*.json ./
 
 RUN npm install
 
-RUN sudo npm install -g pm2
+RUN npm install -g pm2
 # If you are building your code for production
 # RUN npm install --only=production
 
