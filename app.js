@@ -1,6 +1,6 @@
 let express = require('express');
 let app = express();
-let https = require('https');
+let http = require('http');
 let fs = require('fs');
 let request = require('request');
 
@@ -9,15 +9,11 @@ let _ = require('lodash');
 let bodyParser = require('body-parser');
 let cio = require('socket.io-client');
 
-let props, server, pk, crt, ca;
-
-pk = fs.readFileSync('./certs/private.key').toString();
-crt = fs.readFileSync('./certs/ct.crt').toString();
-ca = fs.readFileSync('./certs/ca.crt').toString();
+let props, server;
 
 let iId = typeof process.env.NODE_APP_INSTANCE === "undefined" ? 1 : (parseInt(process.env.NODE_APP_INSTANCE) + 1);
 
-server = https.createServer({key: pk, cert: crt, ca: ca }, app);
+server = http.createServer(app);
 server.listen((8000 + iId), '0.0.0.0');
 
 props = { numSockets: '1', dataFrequency: 1000 };
@@ -34,14 +30,14 @@ app.use(function(req, res, next) {
 let instanceId = iId + "-" + new Array(10).fill("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz")
 	.map(function(x) { return x[Math.floor(Math.random() * x.length)] }).join('');
 
-console.log("Starting secure WSS server, listening on port "+800 + iId+", ID: " + instanceId);
+console.log("Starting WS server, listening on port "+(8000 + iId)+", ID: " + instanceId);
 
 let eventCount = 0;
 let errors = [];
 
 
 
-let io = sio.listen(server,{key: pk, cert: crt, ca: ca, secure: true, rejectUnauthorized: false});
+let io = sio.listen(server);
 
 
 /**
@@ -106,7 +102,7 @@ let addEvent = function(e, socket){
 
 setInterval(function(){
 	update();
-}, 1000);
+}, 2000);
 
 
 /**
